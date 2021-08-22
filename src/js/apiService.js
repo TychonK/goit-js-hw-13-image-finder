@@ -18,6 +18,29 @@ const apiService = {
             
     },
 
+    imgId: 0,
+
+    get id() {
+        return this.imgId;
+    },
+
+    set id(newId) {
+        this.imgId = newId;
+    },
+
+    async fetchBigImg() {
+        const key = "23036221-d804a8a78d7b0866edf7d8fc3";
+        const url = `https://pixabay.com/api/?id=${this.imgId}&key=${key}`;
+        try {
+            const response = await fetch(url);
+            const img = await response.json();
+            return img.hits;
+        } catch (err) {
+            console.log(err)
+        }
+
+    },
+
     resetPage() {
         this.pageNumber = 1;
     },
