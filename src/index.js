@@ -67,3 +67,37 @@ function onImg(e) {
         modal.show();
     })
 }
+
+const dataContainer = document.querySelector(".gallery");
+
+$('.paginator').pagination({
+    dataSource: function(done) {
+        $.ajax({
+            type: 'GET',
+            url: `https://pixabay.com/api/?image_type=photo&orientation=horizontal&per_page=120&key=23036221-d804a8a78d7b0866edf7d8fc3`,
+            success: function(response) {
+                done(response.hits);
+            }
+        });
+    },
+    //dataSource: `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=singapore&page=1&per_page=100&key=23036221-d804a8a78d7b0866edf7d8fc3`,
+    locator: "hits",
+    totalNumberLocator: function(response) {
+        // you can return totalNumber by analyzing response content
+        return response.totalHits;
+    },
+    pageSize: 3,
+    prevText: "<",
+    nextText: ">",
+    ajax: {
+        beforeSend: function() {
+            dataContainer.innerHTML = 'Loading photos ...';
+        }
+    },
+    callback: function(data, pagination) {
+        // template method of yourself
+        
+        dataContainer.innerHTML = "";
+        refs.gallery.insertAdjacentHTML('beforeend', photoCardTemplate(data))
+    }
+})
